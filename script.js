@@ -1,108 +1,94 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { 
-  getFirestore, 
-  collection, 
-  addDoc, 
-  onSnapshot, 
-  query, 
-  orderBy, 
-  limit, 
-  serverTimestamp 
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-// 1. Konfigurasi Firebase (Baru & Bersih)
+// Konfigurasi SDK Firebase kamu (xauusd-analisis)
 const firebaseConfig = {
-  apiKey: "AIzaSyDJSbXvoVqSPFbgwhRZzM4utTuJNgYsxb0",
-  authDomain: "tibatibaturnament.firebaseapp.com",
-  projectId: "tibatibaturnament",
-  storageBucket: "tibatibaturnament.firebasestorage.app",
-  messagingSenderId: "626781978918",
-  appId: "1:626781978918:web:cd36017e37f9f0193541e7",
-  measurementId: "G-C4GVSE0H90"
+  apiKey: "AIzaSy...", // Ganti dengan apiKey Firebase kamu
+  authDomain: "xauusd-analisis.firebaseapp.com",
+  projectId: "xauusd-analisis",
+  storageBucket: "xauusd-analisis.appspot.com",
+  messagingSenderId: "...",
+  appId: "..."
 };
 
-// 2. Inisialisasi Firebase & Firestore
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// Inisialisasi Firebase & Firestore
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-// 3. Nama Koleksi untuk Diskusi XAUUSD
-const XAU_COLLECTION_NAME = "xausd_chats";
+// Koleksi Firestore khusus untuk Room XAUUSD
+const chatRef = db.collection('xausd_chats');
 
-// 4. Inisialisasi Realtime Chat Analisa
-function initXauLiveChat() {
-  const chatBox = document.getElementById('xauChatBox');
-  if (!chatBox) return;
+const chatContainer = document.getElementById('chatContainer');
+const chatForm = document.getElementById('chatForm');
+const usernameInput = document.getElementById('usernameInput');
+const messageInput = document.getElementById('messageInput');
 
-  const q = query(
-    collection(db, XAU_COLLECTION_NAME),
-    orderBy('createdAt', 'asc'),
-    limit(50)
-  );
-
-  onSnapshot(q, (snapshot) => {
-    chatBox.innerHTML = '';
-    if (snapshot.empty) {
-      chatBox.innerHTML = `<div class="text-center text-slate-500 py-6 text-[11px]">Belum ada pesan analisa. Jadilah yang pertama berdiskusi!</div>`;
-      return;
-    }
-
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      const name = data.username || 'Trader Anonymous';
-      const msg = data.message || '';
-      
-      const timeStr = data.createdAt ? new Date(data.createdAt.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Baru saja';
-
-      const msgEl = document.createElement('div');
-      msgEl.className = "bg-obsidian/60 border border-obsidian-border p-2.5 rounded-xl space-y-1";
-      msgEl.innerHTML = `
-        <div class="flex justify-between items-center text-[10px]">
-          <span class="font-bold text-amber-400">${escapeHtml(name)}</span>
-          <span class="text-slate-500">${timeStr}</span>
-        </div>
-        <p class="text-slate-200 text-xs break-words">${escapeHtml(msg)}</p>
-      `;
-      chatBox.appendChild(msgEl);
-    });
-
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }, (error) => {
-    console.error("Error fetching chats:", error);
-    chatBox.innerHTML = `<div class="text-center text-rose-400 py-4 text-[11px]">Gagal memuat chat. Periksa koneksi internet.</div>`;
-  });
+// Muat nama tersimpan dari LocalStorage jika ada
+if (localStorage.getItem('xauusd_username')) {
+  usernameInput.value = localStorage.getItem('xauusd_username');
 }
 
-// 5. Fungsi Kirim Pesan Analisa
-window.handleSendXauChat = async function(event) {
-  event.preventDefault();
-  const nameInput = document.getElementById('xauUsername');
-  const msgInput = document.getElementById('xauMessage');
-
-  const username = nameInput.value.trim();
-  const message = msgInput.value.trim();
-
-  if (!username || !message) return;
-
-  try {
-    await addDoc(collection(db, XAU_COLLECTION_NAME), {
-      username: username,
-      message: message,
-      createdAt: serverTimestamp()
-    });
-
-    msgInput.value = '';
-  } catch (error) {
-    console.error("Gagal mengirim pesan:", error);
-    alert("Gagal mengirim pesan analisa!");
+// Dengarkan pesan real-time
+chatRef.orderBy('timestamp', 'asc').onSnapshot((snapshot) => {
+  chatContainer.innerHTML = '';
+  
+  if (snapshot.empty) {
+    chatContainer.innerHTML = '<div style="text-align: center; color: #787b86; font-size: 12px; margin-top: 20px;">Belum ada pesan analisa. Jadilah yang pertama berdiskusi!</div>';
+    return;
   }
-};
 
-// Helper keamanan
-function escapeHtml(str) {
-  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-}
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+    const time = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+    
+    const messageCard = document.createElement('div');
+    messageCard.className = 'message-card';
+    messageCard.innerHTML = `
+      <div class="message-meta">
+        <span class="sender-name">${escapeHTML(data.sender)}</span>
+        <span class="message-time">${time}</span>
+      </div>
+      <div class="message-text">${escapeHTML(data.message)}</div>
+    `;
+    
+    chatContainer.appendChild(messageCard);
+  });
 
-// Jalankan saat halaman siap
-document.addEventListener('DOMContentLoaded', () => {
-  initXauLiveChat();
+  // Scroll otomatis ke pesan terbaru
+  chatContainer.scrollTop = chatContainer.scrollHeight;
 });
+
+// Kirim pesan baru
+chatForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const sender = usernameInput.value.trim();
+  const message = messageInput.value.trim();
+
+  if (!sender || !message) return;
+
+  // Simpan nama ke local storage
+  localStorage.setItem('xauusd_username', sender);
+
+  chatRef.add({
+    sender: sender,
+    message: message,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  })
+  .then(() => {
+    messageInput.value = '';
+  })
+  .catch((error) => {
+    console.error("Gagal mengirim pesan: ", error);
+  });
+});
+
+// Fungsi untuk mencegah XSS Script Injection
+function escapeHTML(str) {
+  return str.replace(/[&<>'"]/g, 
+    tag => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[tag] || tag)
+  );
+}
