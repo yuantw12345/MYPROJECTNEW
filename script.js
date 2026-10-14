@@ -1,9 +1,9 @@
-// Konfigurasi SDK Firebase kamu (xauusd-analisis)
+// Konfigurasi SDK Firebase kamu
 const firebaseConfig = {
-  apiKey: "AIzaSy...", // Ganti dengan apiKey Firebase kamu
+  apiKey: "AIzaSy...", 
   authDomain: "xauusd-analisis.firebaseapp.com",
-  projectId: "xauusd-analisis",
-  storageBucket: "xauusd-analisis.appspot.com",
+  projectId: "tibatibaturnament",
+  storageBucket: "tibatibaturnament.appspot.com",
   messagingSenderId: "...",
   appId: "..."
 };
@@ -12,8 +12,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Koleksi Firestore khusus untuk Room XAUUSD
-const chatRef = db.collection('xausd_chats');
+// Menggunakan koleksi 'chats' yang sudah ada di database kamu
+const chatRef = db.collection('chats');
 
 const chatContainer = document.getElementById('chatContainer');
 const chatForm = document.getElementById('chatForm');
@@ -25,8 +25,8 @@ if (localStorage.getItem('xauusd_username')) {
   usernameInput.value = localStorage.getItem('xauusd_username');
 }
 
-// Dengarkan pesan real-time
-chatRef.orderBy('timestamp', 'asc').onSnapshot((snapshot) => {
+// Dengarkan pesan real-time berdasarkan field 'time'
+chatRef.orderBy('time', 'asc').onSnapshot((snapshot) => {
   chatContainer.innerHTML = '';
   
   if (snapshot.empty) {
@@ -36,16 +36,17 @@ chatRef.orderBy('timestamp', 'asc').onSnapshot((snapshot) => {
 
   snapshot.forEach((doc) => {
     const data = doc.data();
-    const time = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+    // Menyesuaikan format waktu dari database kamu
+    const timeStr = data.time ? new Date(data.time.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
     
     const messageCard = document.createElement('div');
     messageCard.className = 'message-card';
     messageCard.innerHTML = `
       <div class="message-meta">
-        <span class="sender-name">${escapeHTML(data.sender)}</span>
-        <span class="message-time">${time}</span>
+        <span class="sender-name">${escapeHTML(data.username || 'Anonim')}</span>
+        <span class="message-time">${timeStr}</span>
       </div>
-      <div class="message-text">${escapeHTML(data.message)}</div>
+      <div class="message-text">${escapeHTML(data.message || '')}</div>
     `;
     
     chatContainer.appendChild(messageCard);
@@ -68,9 +69,9 @@ chatForm.addEventListener('submit', (e) => {
   localStorage.setItem('xauusd_username', sender);
 
   chatRef.add({
-    sender: sender,
+    username: sender,
     message: message,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    time: firebase.firestore.FieldValue.serverTimestamp()
   })
   .then(() => {
     messageInput.value = '';
