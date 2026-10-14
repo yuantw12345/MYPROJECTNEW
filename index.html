@@ -1,94 +1,299 @@
-// Konfigurasi SDK Firebase kamu (xauusd-analisis)
-const firebaseConfig = {
-  apiKey: "AIzaSy...", // Ganti dengan apiKey Firebase kamu
-  authDomain: "xauusd-analisis.firebaseapp.com",
-  projectId: "xauusd-analisis",
-  storageBucket: "xauusd-analisis.appspot.com",
-  messagingSenderId: "...",
-  appId: "..."
-};
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XAUUSD Live Analysis & Chat</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-// Inisialisasi Firebase & Firestore
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+    body {
+      background-color: #0b0e14;
+      color: #e1e3e6;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-// Koleksi Firestore khusus untuk Room XAUUSD
-const chatRef = db.collection('xausd_chats');
+    /* Header */
+    header {
+      background-color: #131722;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #2a2e39;
+    }
 
-const chatContainer = document.getElementById('chatContainer');
-const chatForm = document.getElementById('chatForm');
-const usernameInput = document.getElementById('usernameInput');
-const messageInput = document.getElementById('messageInput');
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-// Muat nama tersimpan dari LocalStorage jika ada
-if (localStorage.getItem('xauusd_username')) {
-  usernameInput.value = localStorage.getItem('xauusd_username');
-}
+    .logo-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #f0b90b;
+      letter-spacing: 0.5px;
+    }
 
-// Dengarkan pesan real-time
-chatRef.orderBy('timestamp', 'asc').onSnapshot((snapshot) => {
-  chatContainer.innerHTML = '';
-  
-  if (snapshot.empty) {
-    chatContainer.innerHTML = '<div style="text-align: center; color: #787b86; font-size: 12px; margin-top: 20px;">Belum ada pesan analisa. Jadilah yang pertama berdiskusi!</div>';
-    return;
-  }
+    .logo-subtitle {
+      font-size: 11px;
+      color: #ffb703;
+      font-weight: 600;
+      margin-top: 2px;
+      letter-spacing: 0.8px;
+    }
 
-  snapshot.forEach((doc) => {
-    const data = doc.data();
-    const time = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
-    
-    const messageCard = document.createElement('div');
-    messageCard.className = 'message-card';
-    messageCard.innerHTML = `
-      <div class="message-meta">
-        <span class="sender-name">${escapeHTML(data.sender)}</span>
-        <span class="message-time">${time}</span>
+    .room-badge {
+      background-color: #1e232d;
+      border: 1px solid #2a2e39;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: #26a69a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #26a69a;
+      border-radius: 50%;
+    }
+
+    /* Layout Main Area */
+    .main-container {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 60px);
+      overflow: hidden;
+    }
+
+    /* Chart Section */
+    .chart-section {
+      flex: 1;
+      height: 100%;
+      background-color: #0b0e14;
+      position: relative;
+    }
+
+    #tradingview_widget {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Chat Section */
+    .chat-section {
+      width: 360px;
+      background-color: #131722;
+      border-left: 1px solid #2a2e39;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .chat-header {
+      padding: 14px 16px;
+      background-color: #1e232d;
+      border-bottom: 1px solid #2a2e39;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-header h3 {
+      font-size: 14px;
+      color: #e1e3e6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message-card {
+      background-color: #1e232d;
+      border-radius: 8px;
+      padding: 10px 12px;
+      border: 1px solid #2a2e39;
+      word-break: break-word;
+    }
+
+    .message-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .sender-name {
+      font-size: 12px;
+      font-weight: bold;
+      color: #f0b90b;
+    }
+
+    .message-time {
+      font-size: 10px;
+      color: #787b86;
+    }
+
+    .message-text {
+      font-size: 13px;
+      color: #d1d4dc;
+      line-height: 1.4;
+    }
+
+    /* Form Input Chat */
+    .chat-form {
+      padding: 14px;
+      background-color: #131722;
+      border-top: 1px solid #2a2e39;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chat-form input[type="text"] {
+      width: 100%;
+      background-color: #1e232d;
+      border: 1px solid #2a2e39;
+      border-radius: 6px;
+      padding: 10px 12px;
+      color: #fff;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .chat-form input[type="text"]:focus {
+      border-color: #f0b90b;
+    }
+
+    .form-bottom {
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-form button {
+      background-color: #f0b90b;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-weight: bold;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .chat-form button:hover {
+      background-color: #d8a408;
+    }
+
+    /* Responsive untuk Layar HP */
+    @media (max-width: 768px) {
+      .main-container {
+        flex-direction: column;
+        overflow-y: auto;
+      }
+      .chart-section {
+        height: 60vh;
+      }
+      .chat-section {
+        width: 100%;
+        height: 40vh;
+      }
+    }
+  </style>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-container">
+      <span style="font-size: 20px;">📈</span>
+      <div>
+        <div class="logo-title">XAUUSD LIVE LAB</div>
+        <div class="logo-subtitle">ROY, NANONG, YUAN MAPPING BERSAMA</div>
       </div>
-      <div class="message-text">${escapeHTML(data.message)}</div>
-    `;
-    
-    chatContainer.appendChild(messageCard);
-  });
+    </div>
+    <div class="room-badge">
+      <div class="status-dot"></div>
+      <span>Room: Public Collab</span>
+    </div>
+  </header>
 
-  // Scroll otomatis ke pesan terbaru
-  chatContainer.scrollTop = chatContainer.scrollHeight;
-});
+  <!-- Main Area -->
+  <div class="main-container">
+    <!-- Chart TradingView -->
+    <div class="chart-section">
+      <div id="tradingview_widget"></div>
+    </div>
 
-// Kirim pesan baru
-chatForm.addEventListener('submit', (e) => {
-  e.preventDefault();
+    <!-- Chat Room -->
+    <div class="chat-section">
+      <div class="chat-header">
+        <h3>💬 DISKUSI ANALISA</h3>
+        <span style="font-size: 11px; color: #26a69a; background: #1e232d; padding: 2px 8px; border-radius: 10px;">Live Chat</span>
+      </div>
+      
+      <div class="chat-messages" id="chatContainer">
+        <!-- Pesan akan otomatis dimuat oleh script.js -->
+      </div>
 
-  const sender = usernameInput.value.trim();
-  const message = messageInput.value.trim();
+      <form class="chat-form" id="chatForm">
+        <input type="text" id="usernameInput" placeholder="Nama / Panggilan kamu..." required>
+        <div class="form-bottom">
+          <input type="text" id="messageInput" placeholder="Ketik analisa/strategi (mis: Buy 2650)..." required>
+          <button type="submit">Kirim</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-  if (!sender || !message) return;
+  <!-- Widget TradingView Embed -->
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script type="text/javascript">
+    new TradingView.widget({
+      "autosize": true,
+      "symbol": "OANDA:XAUUSD",
+      "interval": "30",
+      "timezone": "Asia/Jakarta",
+      "theme": "dark",
+      "style": "1",
+      "locale": "id",
+      "toolbar_bg": "#f1f3f6",
+      "enable_publishing": false,
+      "hide_top_toolbar": false,
+      "hide_legend": false,
+      "hide_volume": true,
+      "save_image": true,
+      "container_id": "tradingview_widget"
+    });
+  </script>
 
-  // Simpan nama ke local storage
-  localStorage.setItem('xauusd_username', sender);
-
-  chatRef.add({
-    sender: sender,
-    message: message,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-  })
-  .then(() => {
-    messageInput.value = '';
-  })
-  .catch((error) => {
-    console.error("Gagal mengirim pesan: ", error);
-  });
-});
-
-// Fungsi untuk mencegah XSS Script Injection
-function escapeHTML(str) {
-  return str.replace(/[&<>'"]/g, 
-    tag => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      "'": '&#39;',
-      '"': '&quot;'
-    }[tag] || tag)
-  );
-}
+  <!-- Custom Firebase Logic -->
+  <script src="script.js"></script>
+</body>
+</html>
