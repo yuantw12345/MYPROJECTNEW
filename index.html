@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XAUUSD Live Analysis & Collab</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            obsidian: '#0b0f19',
+            'obsidian-card': '#131c2e',
+            'obsidian-border': '#1e293b',
+            'emerald-accent': '#10b981',
+            crimson: '#ef4444'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-obsidian text-slate-100 font-sans min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <header class="bg-obsidian-card border-b border-obsidian-border sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 font-bold">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <h1 class="font-bold text-sm sm:text-base tracking-wider text-white">XAUUSD <span class="text-amber-400">LIVE LAB</span></h1>
+      </div>
+      <div class="text-xs text-slate-400 bg-obsidian px-3 py-1.5 rounded-lg border border-obsidian-border">
+        <span class="w-2 h-2 rounded-full bg-emerald-accent inline-block animate-pulse mr-1.5"></span> Room: <span class="text-white font-semibold">Public Collab</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Layout -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
+    
+    <!-- TradingView Chart Section (Lebih Luas: 3 Kolom) -->
+    <section class="lg:col-span-3 bg-obsidian-card border border-obsidian-border rounded-2xl overflow-hidden flex flex-col h-[500px] lg:h-[calc(100vh-100px)] shadow-xl">
+      <div class="px-4 py-3 border-b border-obsidian-border flex justify-between items-center bg-obsidian/50">
+        <h2 class="text-xs sm:text-sm font-bold text-amber-400 uppercase tracking-wide">
+          <i class="fa-brands fa-bitcoin mr-1">></i> Gold / US Dollar (XAUUSD) Chart
+        </h2>
+        <span class="text-[10px] text-slate-400">Real-time TradingView Feed</span>
+      </div>
+      <!-- TradingView Widget BEGIN -->
+      <div class="tradingview-widget-container flex-1 w-full h-full">
+        <div class="tradingview-widget-container__widget w-full h-full"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+        {
+          "autosize": true,
+          "symbol": "OANDA:XAUUSD",
+          "interval": "30",
+          "timezone": "Etc/UTC",
+          "theme": "dark",
+          "style": "1",
+          "locale": "id",
+          "enable_publishing": false,
+          "calendar": false,
+          "support_host": "https://www.tradingview.com"
+        }
+        </script>
+      </div>
+      <!-- TradingView Widget END -->
+    </section>
+
+    <!-- Chat & Discussion Section (1 Kolom) -->
+    <section class="bg-obsidian-card border border-obsidian-border rounded-2xl overflow-hidden flex flex-col h-[450px] lg:h-[calc(100vh-100px)] shadow-xl">
+      <div class="px-4 py-3 border-b border-obsidian-border bg-obsidian/50 flex justify-between items-center">
+        <h3 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wide">
+          <i class="fa-solid fa-comments text-emerald-accent mr-1.5"></i> Diskusi Analisa
+        </h3>
+        <span class="text-[10px] bg-emerald-accent/10 text-emerald-accent px-2 py-0.5 rounded border border-emerald-accent/20 font-semibold">Live Chat</span>
+      </div>
+
+      <!-- Box Pesan -->
+      <div id="xauChatBox" class="flex-1 p-3 overflow-y-auto space-y-3 text-xs flex flex-col">
+        <div class="text-center text-slate-500 py-6 text-[11px]">Memuat ruang obrolan analisa...</div>
+      </div>
+
+      <!-- Form Kirim Pesan -->
+      <form id="xauChatForm" onsubmit="handleSendXauChat(event)" class="p-3 border-t border-obsidian-border bg-obsidian/40 space-y-2">
+        <input type="text" id="xauUsername" placeholder="Nama / Panggilan kamu..." required
+          class="w-full bg-obsidian border border-obsidian-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+        <div class="flex gap-2">
+          <input type="text" id="xauMessage" placeholder="Ketik analisa/strategi (mis: Buy 2650)..." required
+            class="flex-1 bg-obsidian border border-obsidian-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+          <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-obsidian font-bold px-4 py-2 rounded-xl text-xs transition-colors shrink-0">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- Script Firebase & Logika Chat Terpisah -->
+  <script type="module" src="script.js"></script>
+</body>
+</html>
