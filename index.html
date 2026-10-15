@@ -1,203 +1,148 @@
 <!DOCTYPE html>
-<html lang="id" class="dark scroll-smooth">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STORE DIAMOND - Top Up Games Otomatis</title>
+    <title>WANTOPUP - Top Up Game Murah & Otomatis</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        darkBg: '#0b0f19',
-                        cardBg: '#131c31',
-                        accentGreen: '#00e699',
-                        accentRed: '#ff1e56'
-                    }
-                }
-            }
-        }
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0b0f19; color: #f8faff; }
-        .font-tech { font-family: 'Space Grotesk', sans-serif; }
-    </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between">
+<body class="bg-slate-950 text-white font-sans min-h-screen flex flex-col justify-between">
 
-    <!-- NAVBAR -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-[#0b0f19]/90 backdrop-blur-md border-b border-slate-800">
-        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-            <a href="#" class="font-tech font-bold text-lg text-white flex items-center gap-2">
-                <i class="fa-solid fa-gamepad text-accentGreen"></i> NEXUS<span class="text-accentRed">STORE</span>
-            </a>
-            <div class="flex items-center gap-3">
-                <a href="#transaksi" class="px-4 py-2 bg-accentGreen text-black font-bold text-xs rounded-xl hover:bg-emerald-400 transition-all font-tech">Cek Pesanan</a>
-            </div>
+    <!-- Header / Navbar -->
+    <header class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-wider text-cyan-400">WAN<span class="text-white">TOPUP</span></h1>
+            <span class="text-xs bg-cyan-500/10 text-cyan-400 px-3 py-1 rounded-full border border-cyan-500/20 font-medium">Server Otomatis</span>
         </div>
     </header>
 
-    <!-- KONTEN UTAMA -->
-    <main class="max-w-4xl mx-auto px-4 pt-24 pb-16 flex-grow w-full">
+    <!-- Main Container -->
+    <main class="max-w-2xl mx-auto p-4 sm:p-6 w-full my-6">
         
-        <!-- BANNER / INFO -->
-        <div class="mb-8 p-6 rounded-2xl bg-gradient-to-r from-indigo-900/50 via-purple-900/30 to-cardBg border border-indigo-500/30 shadow-xl">
-            <span class="px-3 py-1 bg-accentGreen/10 text-accentGreen border border-accentGreen/30 text-[10px] font-tech font-bold rounded-full uppercase">Official & Terpercaya</span>
-            <h1 class="font-tech font-bold text-2xl sm:text-3xl text-white mt-2">TOP UP DIAMOND & VOUCHER GAMES</h1>
-            <p class="text-slate-400 text-xs sm:text-sm mt-1">Proses cepat, aman, dan otomatis 24 Jam langsung masuk ke akun game kamu.</p>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
+            <div class="border-b border-slate-800 pb-4">
+                <h2 class="text-lg font-semibold text-slate-100">Top Up Mobile Legends</h2>
+                <p class="text-xs text-slate-400">Masukkan Data Akun & Pilih Nominal Diamond</p>
+            </div>
+
+            <!-- Form Input Akun -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">User ID</label>
+                    <input type="text" id="user_id" placeholder="Contoh: 12345678" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Zone ID (Server)</label>
+                    <input type="text" id="zone_id" placeholder="Contoh: 1234" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 transition">
+                </div>
+            </div>
+
+            <!-- Pilihan Produk Diamond -->
+            <div>
+                <label class="block text-xs font-medium text-slate-300 mb-2">Pilih Nominal</label>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    
+                    <!-- Pilihan 1: 86 Diamond -->
+                    <label class="cursor-pointer border border-slate-800 bg-slate-950 hover:border-cyan-500 rounded-xl p-3 flex flex-col justify-between transition group">
+                        <input type="radio" name="product" value="ml_86" class="hidden peer" checked>
+                        <span class="text-sm font-semibold text-slate-200 group-hover:text-cyan-400">86 Diamonds</span>
+                        <span class="text-xs text-cyan-400 font-bold mt-2">Rp 20.000</span>
+                    </label>
+
+                    <!-- Pilihan 2: 172 Diamond -->
+                    <label class="cursor-pointer border border-slate-800 bg-slate-950 hover:border-cyan-500 rounded-xl p-3 flex flex-col justify-between transition group">
+                        <input type="radio" name="product" value="ml_172" class="hidden peer">
+                        <span class="text-sm font-semibold text-slate-200 group-hover:text-cyan-400">172 Diamonds</span>
+                        <span class="text-xs text-cyan-400 font-bold mt-2">Rp 40.000</span>
+                    </label>
+
+                    <!-- Pilihan 3: 257 Diamond -->
+                    <label class="cursor-pointer border border-slate-800 bg-slate-950 hover:border-cyan-500 rounded-xl p-3 flex flex-col justify-between transition group">
+                        <input type="radio" name="product" value="ml_257" class="hidden peer">
+                        <span class="text-sm font-semibold text-slate-200 group-hover:text-cyan-400">257 Diamonds</span>
+                        <span class="text-xs text-cyan-400 font-bold mt-2">Rp 60.000</span>
+                    </label>
+
+                </div>
+            </div>
+
+            <!-- Tombol Proses -->
+            <button onclick="prosesTopUp()" id="btn-submit"
+                class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3.5 rounded-xl transition shadow-lg shadow-cyan-500/20 text-sm">
+                Beli Sekarang
+            </button>
+
+            <!-- Area Status Response -->
+            <div id="result-box" class="hidden bg-slate-950 border border-slate-800 p-4 rounded-xl text-xs space-y-1">
+                <p class="font-semibold text-cyan-400">Status Transaksi:</p>
+                <p id="result-text" class="text-slate-300 font-mono break-all"></p>
+            </div>
         </div>
 
-        <form onsubmit="handleCheckout(event)" class="space-y-6">
-            
-            <!-- STEP 1: PILIH GAME -->
-            <div class="bg-cardBg border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="w-7 h-7 rounded-lg bg-accentGreen/10 text-accentGreen font-tech font-bold flex items-center justify-center text-xs">1</span>
-                    <h2 class="font-tech font-bold text-sm sm:text-base text-white">Pilih Game & Masukkan Data Akun</h2>
-                </div>
-                
-                <div class="grid grid-cols-3 gap-3 mb-5">
-                    <label class="cursor-pointer">
-                        <input type="radio" name="game" value="Mobile Legends" checked class="peer hidden">
-                        <div class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl text-center peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
-                            <i class="fa-solid fa-shield-halved text-accentGreen text-lg mb-1"></i>
-                            <span class="block text-[11px] font-bold text-white">Mobile Legends</span>
-                        </div>
-                    </label>
-                    <label class="cursor-pointer">
-                        <input type="radio" name="game" value="Free Fire" class="peer hidden">
-                        <div class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl text-center peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
-                            <i class="fa-solid fa-fire text-amber-500 text-lg mb-1"></i>
-                            <span class="block text-[11px] font-bold text-white">Free Fire</span>
-                        </div>
-                    </label>
-                    <label class="cursor-pointer">
-                        <input type="radio" name="game" value="PUBG Mobile" class="peer hidden">
-                        <div class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl text-center peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
-                            <i class="fa-solid fa-crosshairs text-sky-400 text-lg mb-1"></i>
-                            <span class="block text-[11px] font-bold text-white">PUBG Mobile</span>
-                        </div>
-                    </label>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-[11px] text-slate-400 uppercase font-tech font-bold mb-1">User ID</label>
-                        <input type="text" id="userId" required placeholder="Contoh: 12345678" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white text-xs focus:outline-none focus:border-accentGreen">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-slate-400 uppercase font-tech font-bold mb-1">Server ID</label>
-                        <input type="text" id="serverId" required placeholder="Contoh: (2012)" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white text-xs focus:outline-none focus:border-accentGreen">
-                    </div>
-                </div>
-            </div>
-
-            <!-- STEP 2: PILIH NOMINAL -->
-            <div class="bg-cardBg border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="w-7 h-7 rounded-lg bg-accentGreen/10 text-accentGreen font-tech font-bold flex items-center justify-center text-xs">2</span>
-                    <h2 class="font-tech font-bold text-sm sm:text-base text-white">Pilih Nominal Diamond</h2>
-                </div>
-
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    <label class="cursor-pointer">
-                        <input type="radio" name="nominal" value="86 Diamond - Rp 20.000" required class="peer hidden">
-                        <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
-                            <span class="block font-bold text-white text-xs">86 Diamonds</span>
-                            <span class="text-[10px] text-accentGreen font-tech font-bold">Rp 20.000</span>
-                        </div>
-                    </label>
-                    <label class="cursor-pointer">
-                        <input type="radio" name="nominal" value="172 Diamond - Rp 40.000" class="peer hidden">
-                        <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
-                            <span class="block font-bold text-white text-xs">172 Diamonds</span>
-                            <span class="text-[10px] text-accentGreen font-tech font-bold">Rp 40.000</span>
-                        </div>
-                    </label>
-                    <label class="cursor-pointer">
-                        <input type="radio" name="nominal" value="257 Diamond - Rp 60.000" class="peer hidden">
-                        <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
-                            <span class="block font-bold text-white text-xs">257 Diamonds</span>
-                            <span class="text-[10px] text-accentGreen font-tech font-bold">Rp 60.000</span>
-                        </div>
-                    </label>
-                    <label class="cursor-pointer">
-                        <input type="radio" name="nominal" value="344 Diamond - Rp 80.000" class="peer hidden">
-                        <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
-                            <span class="block font-bold text-white text-xs">344 Diamonds</span>
-                            <span class="text-[10px] text-accentGreen font-tech font-bold">Rp 80.000</span>
-                        </div>
-                    </label>
-                    <label class="cursor-pointer">
-                        <input type="radio" name="nominal" value="706 Diamond - Rp 160.000" class="peer hidden">
-                        <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
-                            <span class="block font-bold text-white text-xs">706 Diamonds</span>
-                            <span class="text-[10px] text-accentGreen font-tech font-bold">Rp 160.000</span>
-                        </div>
-                    </label>
-                    <label class="cursor-pointer">
-                        <input type="radio" name="nominal" value="2195 Diamond - Rp 480.000" class="peer hidden">
-                        <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
-                            <span class="block font-bold text-white text-xs">2195 Diamonds</span>
-                            <span class="text-[10px] text-accentGreen font-tech font-bold">Rp 480.000</span>
-                        </div>
-                    </label>
-                </div>
-            </div>
-
-            <!-- STEP 3: METODE PEMBAYARAN -->
-            <div class="bg-cardBg border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="w-7 h-7 rounded-lg bg-accentGreen/10 text-accentGreen font-tech font-bold flex items-center justify-center text-xs">3</span>
-                    <h2 class="font-tech font-bold text-sm sm:text-base text-white">Pilih Metode Pembayaran</h2>
-                </div>
-
-                <div class="space-y-2">
-                    <label class="flex items-center justify-between p-3.5 bg-slate-900/60 border border-slate-800 rounded-xl cursor-pointer hover:border-accentGreen transition-all">
-                        <div class="flex items-center gap-3">
-                            <input type="radio" name="payment" value="QRIS (All E-Wallet)" required class="accent-accentGreen">
-                            <span class="text-xs font-bold text-white">QRIS (Scan pakai GoPay, OVO, DANA, BCA, dll)</span>
-                        </div>
-                        <span class="text-[10px] text-accentGreen font-tech font-bold">Otomatis</span>
-                    </label>
-                    <label class="flex items-center justify-between p-3.5 bg-slate-900/60 border border-slate-800 rounded-xl cursor-pointer hover:border-accentGreen transition-all">
-                        <div class="flex items-center gap-3">
-                            <input type="radio" name="payment" value="Transfer DANA" class="accent-accentGreen">
-                            <span class="text-xs font-bold text-white">Transfer DANA (0812-3456-7890)</span>
-                        </div>
-                        <span class="text-[10px] text-slate-400 font-tech">Manual</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- TOMBOL PESAN -->
-            <button type="submit" class="w-full py-4 bg-gradient-to-r from-accentGreen to-emerald-500 text-black font-bold font-tech text-sm uppercase rounded-2xl shadow-lg shadow-emerald-500/20 hover:scale-[1.01] transition-all cursor-pointer">
-                Beli Sekarang & Bayar
-            </button>
-        </form>
     </main>
 
-    <!-- FOOTER -->
-    <footer class="bg-cardBg border-t border-slate-800 py-6 text-center text-slate-500 text-xs font-tech">
-        <p>© 2026 NEXUS STORE. All rights reserved.</p>
+    <!-- Footer -->
+    <footer class="text-center py-6 text-xs text-slate-500 border-t border-slate-900">
+        &copy; 2026 WANTOPUP. All rights reserved.
     </footer>
 
-    <!-- SCRIPT SEDERHANA UNTUK PROSES PESANAN -->
+    <!-- JavaScript Penghubung ke Backend Vercel -->
     <script>
-        function handleCheckout(event) {
-            event.preventDefault();
-            const game = document.querySelector('input[name="game"]:checked').value;
-            const userId = document.getElementById('userId').value;
-            const serverId = document.getElementById('serverId').value;
-            const nominal = document.querySelector('input[name="nominal"]:checked').value;
-            const payment = document.querySelector('input[name="payment"]:checked').value;
+        async function prosesTopUp() {
+            const userId = document.getElementById('user_id').value.trim();
+            const zoneId = document.getElementById('zone_id').value.trim();
+            
+            // Mengambil produk yang dipilih user
+            const selectedProduct = document.querySelector('input[name="product"]:checked');
+            const productSku = selectedProduct ? selectedProduct.value : 'ml_86';
 
-            // Simulasi pesan sukses / arahkan ke WhatsApp atau halaman sukses
-            alert(`Pesanan Berhasil Dibuat!\n\nGame: ${game}\nID: ${userId} (${serverId})\nItem: ${nominal}\nPembayaran: ${payment}\n\nSilakan selesaikan pembayaran kamu.`);
+            const btnSubmit = document.getElementById('btn-submit');
+            const resultBox = document.getElementById('result-box');
+            const resultText = document.getElementById('result-text');
+
+            // Validasi Input Sederhana
+            if (!userId || !zoneId) {
+                alert('Mohon masukkan User ID dan Zone ID dengan benar!');
+                return;
+            }
+
+            // Ubah tombol jadi loading
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = 'Memproses Pesanan...';
+            resultBox.classList.add('hidden');
+
+            try {
+                // Mengirim data ke backend serverless di Vercel (/api/topup)
+                const response = await fetch('/api/topup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, zoneId, productSku })
+                });
+
+                const result = await response.json();
+
+                // Tampilkan hasil respon dari server
+                resultBox.classList.remove('hidden');
+                resultText.innerText = JSON.stringify(result, null, 2);
+
+                if (response.ok) {
+                    alert('Permintaan top-up berhasil dikirim ke server!');
+                } else {
+                    alert('Gagal memproses: ' + (result.message || 'Terjadi kesalahan'));
+                }
+
+            } catch (error) {
+                resultBox.classList.remove('hidden');
+                resultText.innerText = 'Error: ' + error.message;
+                alert('Terjadi kesalahan koneksi ke server backend.');
+            } finally {
+                // Kembalikan tombol seperti semula
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = 'Beli Sekarang';
+            }
         }
     </script>
 </body>
