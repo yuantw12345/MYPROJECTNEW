@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
@@ -9,17 +11,42 @@ export default async function handler(req, res) {
         return res.status(400).json({ success: false, message: 'User ID dan Zone ID wajib diisi' });
     }
 
-    // Validasi panjang ID standar Mobile Legends (User ID biasanya 8-10 digit, Zone ID 4 digit)
-    if (user_id.length < 5 || zone_id.length < 3) {
-        return res.status(200).json({ 
+    const merchantId = process.env.APIGAMES_MERCHANT_ID;
+    const secretKey = process.env.APIGAMES_SECRET_KEY;
+
+    if (!merchantId || !secretKey) {
+        return res.status(500).json({ 
             success: false, 
-            message: 'Format ID atau Server terlalu pendek!' 
+            message: 'Konfigurasi APIGAMES_MERCHANT_ID dan APIGAMES_SECRET_KEY belum diisi di Vercel' 
         });
     }
 
-    // Karena format ID sudah benar, kita tampilkan data akun siap transaksi
-    return res.status(200).json({
-        success: true,
-        username: `Player (${user_id})`
-    });
+    // Formula Signature MD5 APIGames: md5(merchant_id + secret_key)
+    const signature = crypto.createHash('md5').update(merchantId + secretKey).digest('hex');
+
+    try {
+        const targetId = `${user_id}${zone_id}`;
+        const url = `https://v1.apigames.id/merchant/${merchantId}/cek-username/mobilelegend?user_id=${targetId}&signature=${signature}`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data && data.is_valid && data.username) {
+            return res.status(200).json({
+                success: true,
+                username: data.username
+            });
+        } else {
+            return res.status(400).json({
+                success: false,
+                message: data.message || 'User ID atau Zone ID tidak ditemukan!'
+            });
+        }
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Gagal terhubung ke server APIGames: ' + error.message
+        });
+    }
 }
