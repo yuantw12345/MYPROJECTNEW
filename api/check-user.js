@@ -31,10 +31,10 @@ export default async function handler(req, res) {
         const response = await fetch(url);
         const data = await response.json();
 
-        // APIGames umumnya mengembalikan struktur data seperti { status, data: { username }, message } atau langsung { is_valid, username }
-        const nickname = data.data?.username || data.username;
+        // Mengambil nama user dari berbagai kemungkinan format respon APIGames
+        const nickname = data.data?.username || data.username || data.data?.game_detail?.username;
 
-        if ((data.status === 200 || data.is_valid || data.success) && nickname) {
+        if ((data.status === 1 || data.status === 200 || data.is_valid || data.success) && nickname) {
             return res.status(200).json({
                 success: true,
                 username: nickname
@@ -42,7 +42,7 @@ export default async function handler(req, res) {
         } else {
             return res.status(400).json({
                 success: false,
-                message: data.message || 'ID atau Server salah / Akun tidak ditemukan!'
+                message: data.error_msg || data.message || 'ID atau Server salah / Akun tidak ditemukan!'
             });
         }
 
