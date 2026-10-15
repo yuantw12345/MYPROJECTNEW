@@ -1,299 +1,204 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XAUUSD Live Analysis & Chat</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      background-color: #0b0e14;
-      color: #e1e3e6;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* Header */
-    header {
-      background-color: #131722;
-      padding: 12px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #2a2e39;
-    }
-
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo-title {
-      font-size: 18px;
-      font-weight: bold;
-      color: #f0b90b;
-      letter-spacing: 0.5px;
-    }
-
-    .logo-subtitle {
-      font-size: 11px;
-      color: #ffb703;
-      font-weight: 600;
-      margin-top: 2px;
-      letter-spacing: 0.8px;
-    }
-
-    .room-badge {
-      background-color: #1e232d;
-      border: 1px solid #2a2e39;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      color: #26a69a;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      background-color: #26a69a;
-      border-radius: 50%;
-    }
-
-    /* Layout Main Area */
-    .main-container {
-      display: flex;
-      flex: 1;
-      height: calc(100vh - 60px);
-      overflow: hidden;
-    }
-
-    /* Chart Section */
-    .chart-section {
-      flex: 1;
-      height: 100%;
-      background-color: #0b0e14;
-      position: relative;
-    }
-
-    #tradingview_widget {
-      width: 100%;
-      height: 100%;
-    }
-
-    /* Chat Section */
-    .chat-section {
-      width: 360px;
-      background-color: #131722;
-      border-left: 1px solid #2a2e39;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-
-    .chat-header {
-      padding: 14px 16px;
-      background-color: #1e232d;
-      border-bottom: 1px solid #2a2e39;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .chat-header h3 {
-      font-size: 14px;
-      color: #e1e3e6;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .chat-messages {
-      flex: 1;
-      padding: 16px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .message-card {
-      background-color: #1e232d;
-      border-radius: 8px;
-      padding: 10px 12px;
-      border: 1px solid #2a2e39;
-      word-break: break-word;
-    }
-
-    .message-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-
-    .sender-name {
-      font-size: 12px;
-      font-weight: bold;
-      color: #f0b90b;
-    }
-
-    .message-time {
-      font-size: 10px;
-      color: #787b86;
-    }
-
-    .message-text {
-      font-size: 13px;
-      color: #d1d4dc;
-      line-height: 1.4;
-    }
-
-    /* Form Input Chat */
-    .chat-form {
-      padding: 14px;
-      background-color: #131722;
-      border-top: 1px solid #2a2e39;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .chat-form input[type="text"] {
-      width: 100%;
-      background-color: #1e232d;
-      border: 1px solid #2a2e39;
-      border-radius: 6px;
-      padding: 10px 12px;
-      color: #fff;
-      font-size: 12px;
-      outline: none;
-    }
-
-    .chat-form input[type="text"]:focus {
-      border-color: #f0b90b;
-    }
-
-    .form-bottom {
-      display: flex;
-      gap: 8px;
-    }
-
-    .chat-form button {
-      background-color: #f0b90b;
-      color: #000;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 16px;
-      font-weight: bold;
-      font-size: 12px;
-      cursor: pointer;
-      transition: background 0.2s;
-      flex-shrink: 0;
-    }
-
-    .chat-form button:hover {
-      background-color: #d8a408;
-    }
-
-    /* Responsive untuk Layar HP */
-    @media (max-width: 768px) {
-      .main-container {
-        flex-direction: column;
-        overflow-y: auto;
-      }
-      .chart-section {
-        height: 60vh;
-      }
-      .chat-section {
-        width: 100%;
-        height: 40vh;
-      }
-    }
-  </style>
-
-  <!-- Firebase Scripts -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STORE DIAMOND - Top Up Games Otomatis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0f19',
+                        cardBg: '#131c31',
+                        accentGreen: '#00e699',
+                        accentRed: '#ff1e56'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0b0f19; color: #f8faff; }
+        .font-tech { font-family: 'Space Grotesk', sans-serif; }
+    </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col justify-between">
 
-  <!-- Header -->
-  <header>
-    <div class="logo-container">
-      <span style="font-size: 20px;">📈</span>
-      <div>
-        <div class="logo-title">XAUUSD LIVE LAB</div>
-        <div class="logo-subtitle">ROY, NANONG, YUAN MAPPING BERSAMA</div>
-      </div>
-    </div>
-    <div class="room-badge">
-      <div class="status-dot"></div>
-      <span>Room: Public Collab</span>
-    </div>
-  </header>
-
-  <!-- Main Area -->
-  <div class="main-container">
-    <!-- Chart TradingView -->
-    <div class="chart-section">
-      <div id="tradingview_widget"></div>
-    </div>
-
-    <!-- Chat Room -->
-    <div class="chat-section">
-      <div class="chat-header">
-        <h3>💬 DISKUSI ANALISA</h3>
-        <span style="font-size: 11px; color: #26a69a; background: #1e232d; padding: 2px 8px; border-radius: 10px;">Live Chat</span>
-      </div>
-      
-      <div class="chat-messages" id="chatContainer">
-        <!-- Pesan akan otomatis dimuat oleh script.js -->
-      </div>
-
-      <form class="chat-form" id="chatForm">
-        <input type="text" id="usernameInput" placeholder="Nama / Panggilan kamu..." required>
-        <div class="form-bottom">
-          <input type="text" id="messageInput" placeholder="Ketik analisa/strategi (mis: Buy 2650)..." required>
-          <button type="submit">Kirim</button>
+    <!-- NAVBAR -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#0b0f19]/90 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <a href="#" class="font-tech font-bold text-lg text-white flex items-center gap-2">
+                <i class="fa-solid fa-gamepad text-accentGreen"></i> NEXUS<span class="text-accentRed">STORE</span>
+            </a>
+            <div class="flex items-center gap-3">
+                <a href="#transaksi" class="px-4 py-2 bg-accentGreen text-black font-bold text-xs rounded-xl hover:bg-emerald-400 transition-all font-tech">Cek Pesanan</a>
+            </div>
         </div>
-      </form>
-    </div>
-  </div>
+    </header>
 
-  <!-- Widget TradingView Embed -->
-  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-  <script type="text/javascript">
-    new TradingView.widget({
-      "autosize": true,
-      "symbol": "OANDA:XAUUSD",
-      "interval": "30",
-      "timezone": "Asia/Jakarta",
-      "theme": "dark",
-      "style": "1",
-      "locale": "id",
-      "toolbar_bg": "#131722",
-      "enable_publishing": false,
-      "hide_top_toolbar": false,
-      "hide_legend": false,
-      "hide_volume": false,
-      "save_image": true,
-      "container_id": "tradingview_widget"
-    });
-  </script>
+    <!-- KONTEN UTAMA -->
+    <main class="max-w-4xl mx-auto px-4 pt-24 pb-16 flex-grow w-full">
+        
+        <!-- BANNER / INFO -->
+        <div class="mb-8 p-6 rounded-2xl bg-gradient-to-r from-indigo-900/50 via-purple-900/30 to-cardBg border border-indigo-500/30 shadow-xl">
+            <span class="px-3 py-1 bg-accentGreen/10 text-accentGreen border border-accentGreen/30 text-[10px] font-tech font-bold rounded-full uppercase">Official & Terpercaya</span>
+            <h1 class="font-tech font-bold text-2xl sm:text-3xl text-white mt-2">TOP UP DIAMOND & VOUCHER GAMES</h1>
+            <p class="text-slate-400 text-xs sm:text-sm mt-1">Proses cepat, aman, dan otomatis 24 Jam langsung masuk ke akun game kamu.</p>
+        </div>
 
-  <!-- Custom Firebase Logic -->
-  <script src="script.js"></script>
+        <form onsubmit="handleCheckout(event)" class="space-y-6">
+            
+            <!-- STEP 1: PILIH GAME -->
+            <div class="bg-cardBg border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-7 h-7 rounded-lg bg-accentGreen/10 text-accentGreen font-tech font-bold flex items-center justify-center text-xs">1</span>
+                    <h2 class="font-tech font-bold text-sm sm:text-base text-white">Pilih Game & Masukkan Data Akun</h2>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-3 mb-5">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="game" value="Mobile Legends" checked class="peer hidden">
+                        <div class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl text-center peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
+                            <i class="fa-solid fa-shield-halved text-accentGreen text-lg mb-1"></i>
+                            <span class="block text-[11px] font-bold text-white">Mobile Legends</span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="game" value="Free Fire" class="peer hidden">
+                        <div class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl text-center peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
+                            <i class="fa-solid fa-fire text-amber-500 text-lg mb-1"></i>
+                            <span class="block text-[11px] font-bold text-white">Free Fire</span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="game" value="PUBG Mobile" class="peer hidden">
+                        <div class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl text-center peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
+                            <i class="fa-solid fa-crosshairs text-sky-400 text-lg mb-1"></i>
+                            <span class="block text-[11px] font-bold text-white">PUBG Mobile</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] text-slate-400 uppercase font-tech font-bold mb-1">User ID</label>
+                        <input type="text" id="userId" required placeholder="Contoh: 12345678" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white text-xs focus:outline-none focus:border-accentGreen">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-400 uppercase font-tech font-bold mb-1">Server ID</label>
+                        <input type="text" id="serverId" required placeholder="Contoh: (2012)" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white text-xs focus:outline-none focus:border-accentGreen">
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: PILIH NOMINAL -->
+            <div class="bg-cardBg border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-7 h-7 rounded-lg bg-accentGreen/10 text-accentGreen font-tech font-bold flex items-center justify-center text-xs">2</span>
+                    <h2 class="font-tech font-bold text-sm sm:text-base text-white">Pilih Nominal Diamond</h2>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="nominal" value="86 Diamond - Rp 20.000" required class="peer hidden">
+                        <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
+                            <span class="block font-bold text-white text-xs">86 Diamonds</span>
+                            <span class="text-[10px] text-accentGreen font-tech font-bold">Rp 20.000</span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="nominal" value="172 Diamond - Rp 40.000" class="peer hidden">
+                        <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
+                            <span class="block font-bold text-white text-xs">172 Diamonds</span>
+                            <span class="text-[10px] text-accentGreen font-tech font-bold">Rp 40.000</span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="nominal" value="257 Diamond - Rp 60.000" class="peer hidden">
+                        <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
+                            <span class="block font-bold text-white text-xs">257 Diamonds</span>
+                            <span class="text-[10px] text-accentGreen font-tech font-bold">Rp 60.000</span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="nominal" value="344 Diamond - Rp 80.000" class="peer hidden">
+                        <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
+                            <span class="block font-bold text-white text-xs">344 Diamonds</span>
+                            <span class="text-[10px] text-accentGreen font-tech font-bold">Rp 80.000</span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="nominal" value="706 Diamond - Rp 160.000" class="peer hidden">
+                        <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
+                            <span class="block font-bold text-white text-xs">706 Diamonds</span>
+                            <span class="text-[10px] text-accentGreen font-tech font-bold">Rp 160.000</span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="nominal" value="2195 Diamond - Rp 480.000" class="peer hidden">
+                        <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl peer-checked:border-accentGreen peer-checked:bg-accentGreen/10 transition-all">
+                            <span class="block font-bold text-white text-xs">2195 Diamonds</span>
+                            <span class="text-[10px] text-accentGreen font-tech font-bold">Rp 480.000</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- STEP 3: METODE PEMBAYARAN -->
+            <div class="bg-cardBg border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-7 h-7 rounded-lg bg-accentGreen/10 text-accentGreen font-tech font-bold flex items-center justify-center text-xs">3</span>
+                    <h2 class="font-tech font-bold text-sm sm:text-base text-white">Pilih Metode Pembayaran</h2>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="flex items-center justify-between p-3.5 bg-slate-900/60 border border-slate-800 rounded-xl cursor-pointer hover:border-accentGreen transition-all">
+                        <div class="flex items-center gap-3">
+                            <input type="radio" name="payment" value="QRIS (All E-Wallet)" required class="accent-accentGreen">
+                            <span class="text-xs font-bold text-white">QRIS (Scan pakai GoPay, OVO, DANA, BCA, dll)</span>
+                        </div>
+                        <span class="text-[10px] text-accentGreen font-tech font-bold">Otomatis</span>
+                    </label>
+                    <label class="flex items-center justify-between p-3.5 bg-slate-900/60 border border-slate-800 rounded-xl cursor-pointer hover:border-accentGreen transition-all">
+                        <div class="flex items-center gap-3">
+                            <input type="radio" name="payment" value="Transfer DANA" class="accent-accentGreen">
+                            <span class="text-xs font-bold text-white">Transfer DANA (0812-3456-7890)</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400 font-tech">Manual</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- TOMBOL PESAN -->
+            <button type="submit" class="w-full py-4 bg-gradient-to-r from-accentGreen to-emerald-500 text-black font-bold font-tech text-sm uppercase rounded-2xl shadow-lg shadow-emerald-500/20 hover:scale-[1.01] transition-all cursor-pointer">
+                Beli Sekarang & Bayar
+            </button>
+        </form>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-cardBg border-t border-slate-800 py-6 text-center text-slate-500 text-xs font-tech">
+        <p>© 2026 NEXUS STORE. All rights reserved.</p>
+    </footer>
+
+    <!-- SCRIPT SEDERHANA UNTUK PROSES PESANAN -->
+    <script>
+        function handleCheckout(event) {
+            event.preventDefault();
+            const game = document.querySelector('input[name="game"]:checked').value;
+            const userId = document.getElementById('userId').value;
+            const serverId = document.getElementById('serverId').value;
+            const nominal = document.querySelector('input[name="nominal"]:checked').value;
+            const payment = document.querySelector('input[name="payment"]:checked').value;
+
+            // Simulasi pesan sukses / arahkan ke WhatsApp atau halaman sukses
+            alert(`Pesanan Berhasil Dibuat!\n\nGame: ${game}\nID: ${userId} (${serverId})\nItem: ${nominal}\nPembayaran: ${payment}\n\nSilakan selesaikan pembayaran kamu.`);
+        }
+    </script>
 </body>
 </html>
