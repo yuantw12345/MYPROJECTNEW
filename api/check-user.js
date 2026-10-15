@@ -9,32 +9,31 @@ export default async function handler(req, res) {
         return res.status(400).json({ success: false, message: 'User ID dan Zone ID wajib diisi' });
     }
 
-    const apiKey = process.env.DIGIFLAZZ_USERNAME;
-
     try {
-        const apiResponse = await fetch('https://agenh2h.com/api/v1/game-checker', {
-            method: 'POST',
+        // Menggunakan layanan pengecekan game publik untuk mengambil data nickname asli
+        const response = await fetch(`https://api.duniagames.co.id/api/transaction/v1/top-up/inquiry/store?productId=1&itemId=2&paymentId=353&gameId=${user_id}&zoneId=${zone_id}`, {
             headers: {
-                'Content-Type': 'application/json',
-                'X-API-Key': apiKey
-            },
-            body: JSON.stringify({
-                game: 'mobile-legends',
-                target: user_id,
-                zone: zone_id
-            })
+                'User-Agent': 'Mozilla/5.0',
+                'Referer': 'https://duniagames.co.id/'
+            }
         });
 
-        const data = await apiResponse.json();
+        const result = await response.json();
 
-        // Kita kembalikan seluruh data mentah dari AgenH2H ke frontend agar terlihat di kotak log
-        return res.status(200).json({
-            success: true,
-            raw_response: data, // Membantu melihat struktur asli dari AgenH2H
-            username: data.username || data.name || data.nickname || data.data?.username || data.data?.name || `User: ${user_id}`
-        });
+        if (result && result.data && result.data.gameDetail) {
+            const nickname = result.data.gameDetail.userName;
+            return res.status(200).json({
+                success: true,
+                username: nickname
+            });
+        } else {
+            return res.status(200).json({
+                success: false,
+                message: 'ID atau Server salah / Akun tidak ditemukan'
+            });
+        }
 
     } catch (error) {
-        return res.status(500).json({ success: false, message: 'Gagal terhubung: ' + error.message });
+        return res.status(500).json({ success: false, message: 'Gagal mengecek akun: ' + error.message });
     }
 }
