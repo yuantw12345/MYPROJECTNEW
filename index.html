@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top Up Mobile Legends</title>
+    <title>Top Up Mobile Legends - Store</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="bg-slate-950 text-white font-sans p-6">
+<body class="bg-slate-950 text-white font-sans p-6 min-h-screen flex items-center justify-center">
 
-    <div class="max-w-md mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+    <div class="max-w-lg w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
         <h1 class="text-xl font-bold mb-1">Top Up Mobile Legends</h1>
         <p class="text-sm text-slate-400 mb-6">Masukkan Data Akun & Pilih Nominal Diamond</p>
 
@@ -17,15 +17,20 @@
         <div class="grid grid-cols-2 gap-4 mb-4">
             <div>
                 <label class="block text-xs font-medium text-slate-300 mb-1">User ID</label>
-                <input type="text" id="userId" placeholder="12345678" 
+                <input type="text" id="userId" placeholder="Cth: 471013299" 
                     class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500">
             </div>
             <div>
                 <label class="block text-xs font-medium text-slate-300 mb-1">Zone ID (Server)</label>
-                <input type="text" id="zoneId" placeholder="1234" 
+                <input type="text" id="zoneId" placeholder="Cth: 2393" 
                     class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500">
             </div>
         </div>
+
+        <!-- Tombol Cek Nickname -->
+        <button onclick="checkGameId()" class="w-full mb-4 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2 rounded-xl text-sm transition">
+            Cek Nickname Akun
+        </button>
 
         <!-- Box Hasil Cek Nickname -->
         <div id="nicknameBox" class="hidden mb-4 p-3 bg-cyan-950/40 border border-cyan-800/50 rounded-xl text-sm">
@@ -33,10 +38,22 @@
             <span id="nicknameResult" class="font-bold text-white"></span>
         </div>
 
-        <!-- Tombol Cek Nickname -->
-        <button onclick="checkGameId()" class="w-full mb-4 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2.5 rounded-xl text-sm transition">
-            Cek Nickname Akun
-        </button>
+        <!-- Pilihan Nominal Diamond -->
+        <label class="block text-xs font-medium text-slate-300 mb-2">Pilih Nominal</label>
+        <div class="grid grid-cols-3 gap-3 mb-6">
+            <div onclick="selectNominal(this, 'ml_86', '86 Diamonds', 20000)" class="nominal-card cursor-pointer bg-slate-950 border border-slate-800 hover:border-cyan-500 rounded-xl p-3 transition">
+                <div class="text-xs font-semibold text-white">86 Diamonds</div>
+                <div class="text-xs text-cyan-400 mt-1">Rp 20.000</div>
+            </div>
+            <div onclick="selectNominal(this, 'ml_172', '172 Diamonds', 40000)" class="nominal-card cursor-pointer bg-slate-950 border border-slate-800 hover:border-cyan-500 rounded-xl p-3 transition">
+                <div class="text-xs font-semibold text-white">172 Diamonds</div>
+                <div class="text-xs text-cyan-400 mt-1">Rp 40.000</div>
+            </div>
+            <div onclick="selectNominal(this, 'ml_257', '257 Diamonds', 60000)" class="nominal-card cursor-pointer bg-slate-950 border border-slate-800 hover:border-cyan-500 rounded-xl p-3 transition">
+                <div class="text-xs font-semibold text-white">257 Diamonds</div>
+                <div class="text-xs text-cyan-400 mt-1">Rp 60.000</div>
+            </div>
+        </div>
 
         <!-- Tombol Beli / Transaksi -->
         <button onclick="submitTransaction()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-cyan-900/50">
@@ -44,12 +61,26 @@
         </button>
 
         <!-- Status Log / Respon -->
-        <div id="statusLog" class="mt-6 text-xs bg-slate-950 p-4 rounded-xl border border-slate-800 text-slate-400 hidden font-mono overflow-x-auto">
+        <div id="statusLog" class="mt-4 text-xs bg-slate-950 p-4 rounded-xl border border-slate-800 text-slate-400 hidden font-mono overflow-x-auto">
         </div>
     </div>
 
     <script>
-        // Fungsi untuk Cek Nickname Game
+        let selectedProduct = null;
+
+        function selectNominal(element, code, name, price) {
+            // Hilangkan border aktif dari semua kartu
+            document.querySelectorAll('.nominal-card').forEach(card => {
+                card.classList.remove('border-cyan-500', 'bg-cyan-950/20');
+                card.classList.add('border-slate-800', 'bg-slate-950');
+            });
+            // Berikan tanda aktif ke kartu yang diklik
+            element.classList.remove('border-slate-800', 'bg-slate-950');
+            element.classList.add('border-cyan-500', 'bg-cyan-950/20');
+
+            selectedProduct = { code, name, price };
+        }
+
         async function checkGameId() {
             const userId = document.getElementById('userId').value;
             const zoneId = document.getElementById('zoneId').value;
@@ -67,7 +98,6 @@
             logBox.innerText = "Mengecek data akun...";
 
             try {
-                // Mengarahkan ke API backend Vercel (/api/check-user atau sesuaikan endpoint kamu)
                 const response = await fetch('/api/check-user', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -75,21 +105,53 @@
                 });
 
                 const result = await response.json();
-                logBox.innerText = JSON.stringify(result, null, 2);
+                logBox.classList.add('hidden');
 
-                if (result.success || result.data) {
-                    nickResult.innerText = result.data.username || result.username || "Akun Valid";
+                if (result.success) {
+                    nickResult.innerText = result.username;
                     nickBox.classList.remove('hidden');
                 } else {
                     alert('ID atau Server salah / Akun tidak ditemukan!');
                 }
             } catch (error) {
-                logBox.innerText = "Terjadi kesalahan koneksi: " + error.message;
+                logBox.innerText = "Terjadi kesalahan koneksi.";
             }
         }
 
-        function submitTransaction() {
-            alert('Fitur transaksi siap dikirim ke backend AgenH2H!');
+        async function submitTransaction() {
+            const userId = document.getElementById('userId').value;
+            const zoneId = document.getElementById('zoneId').value;
+            const logBox = document.getElementById('statusLog');
+
+            if (!userId || !zoneId) {
+                alert('Masukkan User ID dan Zone ID terlebih dahulu!');
+                return;
+            }
+
+            if (!selectedProduct) {
+                alert('Silakan pilih nominal produk Diamond terlebih dahulu!');
+                return;
+            }
+
+            logBox.classList.remove('hidden');
+            logBox.innerText = "Memproses transaksi ke server...";
+
+            try {
+                const response = await fetch('/api/topup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        zone_id: zoneId,
+                        buyer_sku_code: selectedProduct.code
+                    })
+                });
+
+                const result = await response.json();
+                logBox.innerText = JSON.stringify(result, null, 2);
+            } catch (error) {
+                logBox.innerText = "Gagal memproses transaksi: " + error.message;
+            }
         }
     </script>
 </body>
